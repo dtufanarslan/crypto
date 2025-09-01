@@ -1,17 +1,17 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { Api } from '../api.service';
 import { JsonPipe } from '@angular/common';
+import { TableModule } from 'primeng/table';
 
 @Component({
     selector: 'example',
     templateUrl: './example.component.html',
     standalone: true,
-    imports: [ButtonModule, JsonPipe]
+    imports: [TableModule, JsonPipe]
 })
 export class Example implements OnInit {
     private api = inject(Api);
-    data = signal({});
+    data: any = signal({});
 
     refresh() {
         this.api.getData().subscribe({

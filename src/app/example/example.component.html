@@ -1,7 +1,22 @@
 @if (data()) {
 <div>
-    <p-button (click)="onClick()">Click</p-button>
     <h1><ng-content></ng-content></h1>
-    <pre>{{ data() | json }}</pre>
+    <p-table [value]="data()" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Quantity</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-product>
+            
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.data | json}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
 }
