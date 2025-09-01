@@ -24,10 +24,17 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
+import https from 'https';
+const instance = axios.create({
+  httpsAgent: new https.Agent({  
+    rejectUnauthorized: false
+  })
+});
+
 app.get('/api/example', async (_req, res) => {
   const apiUrl = "https://api.restful-api.dev/objects"
   try {
-    const response = await axios.get(apiUrl);
+    const response = await instance.get(apiUrl);
     res.json(response.data);
   } catch (_err) {
     res.status(500).send('Error fetching data');
