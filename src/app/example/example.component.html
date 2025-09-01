@@ -1,0 +1,7 @@
+@if (data()) {
+<div>
+    <p-button (click)="onClick()">Click</p-button>
+    <h1><ng-content></ng-content></h1>
+    <pre>{{ data() | json }}</pre>
+</div>
+}

@@ -5,6 +5,7 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import axios from 'axios';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
@@ -23,6 +24,15 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
+app.get('/api/example', async (_req, res) => {
+  const apiUrl = "https://api.restful-api.dev/objects"
+  try {
+    const response = await axios.get(apiUrl);
+    res.json(response.data);
+  } catch (_err) {
+    res.status(500).send('Error fetching data');
+  }
+});
 
 /**
  * Serve static files from /browser
