@@ -1,40 +1,49 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Api as ApiService } from '../api.service';
 import { Example } from './example.component';
-import { Api } from '../api.service';
-import fetch from 'sync-fetch';
+import { of, throwError } from 'rxjs';
 
-describe('Example', () => {
+describe('YourComponent', () => {
     let component: Example;
     let fixture: ComponentFixture<Example>;
-
-    const apiMock = {
-        getData: jest.fn().mockReturnValue(fetch("/api/example"))
-    };
+    let apiService: jest.Mocked<ApiService>;
 
     beforeEach(() => {
+        apiService = {
+            getData: jest.fn(),
+        } as unknown as jest.Mocked<ApiService>;
+
         TestBed.configureTestingModule({
             declarations: [Example],
             providers: [
-                { provide: Api, useValue: apiMock },
+                { provide: ApiService, useValue: apiService }
             ]
+        }).compileComponents();
 
-        });
         fixture = TestBed.createComponent(Example);
         component = fixture.componentInstance;
-        fixture.detectChanges();
     });
 
-    it('should create', () => {
+    it('should render the component', () => {
+        apiService.getData.mockReturnValue(of([{ id: 1, name: 'Product 1', data: {} }]));
+        fixture.detectChanges();
         expect(component).toBeTruthy();
     });
 
-    describe('.showMessage', () => {
-        it('should show the message', () => {
-            expect(apiMock.getData).not.toHaveBeenCalled();
-            expect(component.data).toBe({});
-            component.refresh();
-            expect(apiMock.getData).toHaveBeenCalledTimes(1);
-            expect(component.data).toContain('id');
-        });
+    it('should display header content', () => {
+        const headerContent = 'Test Header';
+        component.headerContent = headerContent;
+        fixture.detectChanges();
+        const h1 = fixture.nativeElement.querySelector('h1');
+        expect(h1.textContent).toContain(headerContent);
+    });
+
+    it('should render table headers correctly', () => {
+        apiService.getData.mockReturnValue(of([{ id: 1, name: 'Product 1', data: {} }]));
+        fixture.detectChanges();
+        const headers = fixture.nativeElement.querySelectorAll('th');
+        expect(headers.length).toBe(3);
+        expect(headers[0].textContent).toBe('Code');
+        expect(headers[1].textContent).toBe('Name');
     });
 });
