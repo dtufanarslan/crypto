@@ -32,6 +32,16 @@ describe('Example', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should render table header', () => {
+        apiService.getData.mockReturnValue(of([{ id: 1, name: 'Product 1', data: { price: 5, color: 'black' } }]));
+        fixture.detectChanges();
+        const thead = fixture.nativeElement.querySelectorAll('th');
+        expect(thead.length).toBe(3);
+        expect(thead[0].textContent).toBe('Id');
+        expect(thead[1].textContent).toBe('Name');
+        expect(thead[2].textContent).toBe('Data');
+    });
+
     it('should render table body', () => {
         apiService.getData.mockReturnValue(of([{ id: 1, name: 'Product 1', data: { price: 5, color: 'black' } }]));
         fixture.detectChanges();
