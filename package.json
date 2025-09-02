@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "jest --coverage --coverageReporters='text-summary'",
+    "test": "jest --coverage",
     "serve:ssr:crypto": "node dist/crypto/server/server.mjs"
   },
   "prettier": {
@@ -52,6 +52,7 @@
     "jasmine-core": "~5.9.0",
     "jest": "^30.1.2",
     "jest-preset-angular": "^15.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.9.2"
   }
 }
