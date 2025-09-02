@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Api as ApiService } from '../api.service';
-import { Example } from './example.component';
+import { ApiService as ApiService } from '../api.service';
+import { ExampleComponent } from './example.component';
 import { of } from 'rxjs';
 import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('Example', () => {
-    let component: Example;
-    let fixture: ComponentFixture<Example>;
+    let component: ExampleComponent;
+    let fixture: ComponentFixture<ExampleComponent>;
     let apiService: jest.Mocked<ApiService>;
 
     beforeEach(() => {
@@ -19,10 +19,10 @@ describe('Example', () => {
                 { provide: ApiService, useValue: apiService },
                 provideZonelessChangeDetection()
             ],
-            imports: [Example]
+            imports: [ExampleComponent]
         }).compileComponents();
 
-        fixture = TestBed.createComponent(Example);
+        fixture = TestBed.createComponent(ExampleComponent);
         component = fixture.componentInstance;
     });
 

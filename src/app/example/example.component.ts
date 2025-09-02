@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Api } from '../api.service';
+import { ApiService } from '../api.service';
 import { JsonPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 
@@ -9,8 +9,8 @@ import { TableModule } from 'primeng/table';
     standalone: true,
     imports: [TableModule, JsonPipe]
 })
-export class Example implements OnInit {
-    private api = inject(Api);
+export class ExampleComponent implements OnInit {
+    private api = inject(ApiService);
     data: any = signal({});
 
     refresh() {
