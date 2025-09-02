@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApiService as ApiService } from '../api.service';
+import { ApiService } from '../api.service';
 import { ExampleComponent } from './example.component';
 import { of } from 'rxjs';
 import { provideZonelessChangeDetection } from '@angular/core';
 
-describe('Example', () => {
+describe('ExampleComponent', () => {
     let component: ExampleComponent;
     let fixture: ComponentFixture<ExampleComponent>;
     let apiService: jest.Mocked<ApiService>;
@@ -50,5 +50,28 @@ describe('Example', () => {
         expect(tbody[0].textContent).toBe('1');
         expect(tbody[1].textContent).toBe('Product 1');
         expect(tbody[2].textContent).toBe('{\n  "price": 5,\n  "color": "black"\n}');
+
+        apiService.getData.mockReturnValue(of([{ id: 1, name: 'Product 1', data: { price: 5, color: 'white' } }]));
+        component.refresh();
+        fixture.detectChanges();
+        expect(tbody.length).toBe(3);
+        expect(tbody[0].textContent).toBe('1');
+        expect(tbody[1].textContent).toBe('Product 1');
+        expect(tbody[2].textContent).toBe('{\n  "price": 5,\n  "color": "black"\n}');
+    });
+
+    it('should handle callback', () => {
+        apiService.getData.mockReturnValue(of([{ id: 1, name: 'Product 1', data: { price: 5, color: 'black' } }]));
+        component.callback.next(of([{ id: 1, name: 'Product 1', data: { price: 5, color: 'black' } }]))
+        fixture.detectChanges();
+        const tbody = fixture.nativeElement.querySelectorAll('td');
+        expect(tbody.length).toBe(3);
+        expect(tbody[0].textContent).toBe('1');
+        expect(tbody[1].textContent).toBe('Product 1');
+        expect(tbody[2].textContent).toBe('{\n  "price": 5,\n  "color": "black"\n}');
+
+        let spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+        component.callback.error('Test')
+        expect(spy).toHaveBeenCalled();
     });
 });

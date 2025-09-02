@@ -13,21 +13,20 @@ export class ExampleComponent implements OnInit {
     private api = inject(ApiService);
     data: any = signal({});
 
+    callback = {
+        next: (res: any) => {
+            this.data.set(res);
+        },
+        error: (err: any) => {
+            console.error('Error fetching data', err);
+        }
+    }
+
     refresh() {
-        this.api.getData().subscribe({
-            next: (res) => {
-                this.data.set(res)
-                console.log(this.data())
-            },
-            error: (err) => console.error('Error fetching data', err)
-        });
+        this.api.getData().subscribe(this.callback);
     }
 
     ngOnInit() {
-        this.refresh();
-    }
-
-    onClick() {
         this.refresh();
     }
 }
