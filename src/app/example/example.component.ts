@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { ApiService } from '../api.service';
 import { JsonPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
@@ -11,10 +11,10 @@ import { TableModule } from 'primeng/table';
 })
 export class ExampleComponent implements OnInit {
     private api = inject(ApiService);
-    data: any = signal({});
+    data: WritableSignal<Array<any>> = signal([]);
 
     callback = {
-        next: (res: any) => {
+        next: (res: Array<any>) => {
             this.data.set(res);
         },
         error: (err: any) => {
