@@ -5,7 +5,9 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import https from 'https';
 import axios from 'axios';
+import { setupCache } from 'axios-cache-interceptor';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
@@ -24,12 +26,11 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
-import https from 'https';
-const instance = axios.create({
+const instance = setupCache(axios.create({
   httpsAgent: new https.Agent({  
     rejectUnauthorized: false
   })
-});
+}), { ttl: 1000 * 60 * 60 });
 
 app.get('/api/example', async (_req, res) => {
   const apiUrl = "https://api.restful-api.dev/objects"
