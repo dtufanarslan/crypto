@@ -1,13 +1,13 @@
 import { Component, computed, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { ApiService } from '../api.service';
-import { TableModule } from 'primeng/table';
 import { TreeTableModule } from 'primeng/treetable';
 
 @Component({
     selector: 'example',
     templateUrl: './example.component.html',
+    styleUrl: './example.component.css',
     standalone: true,
-    imports: [TableModule, TreeTableModule]
+    imports: [TreeTableModule]
 })
 export class ExampleComponent implements OnInit {
     private api = inject(ApiService);

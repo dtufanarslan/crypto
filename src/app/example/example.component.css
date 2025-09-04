@@ -1,0 +1,16 @@
+* {
+    font-family: monospace;
+}
+
+h1 {
+    text-decoration: underline;
+}
+
+tr:hover {
+    background-color: darkblue;
+    color: white;
+}
+
+tr:not(:hover) {
+    background-color: rgba(0,0,0,0.1);
+}
