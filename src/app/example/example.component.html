@@ -1,22 +1,22 @@
-@if (data()) {
+@if (tableData()) {
 <div>
     <h1><ng-content></ng-content></h1>
-    <p-table [value]="data()" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-treetable [value]="tableData()" [scrollable]="true" [tableStyle]="{'min-width':'50rem'}">
         <ng-template #header>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Data</th>
             </tr>
         </ng-template>
-        <ng-template #body let-product>
-            
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.data | json}}</td>
+        <ng-template #body let-rowNode let-rowData="rowData">
+            <tr [ttRow]="rowNode">
+                <td>
+                    <p-treetable-toggler [rowNode]="rowNode" />
+                    {{ rowData.id }}
+                </td>
+                <td>{{ rowData.name }}</td>
             </tr>
         </ng-template>
-    </p-table>
+    </p-treetable>
 </div>
 }
