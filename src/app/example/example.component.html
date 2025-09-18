@@ -2,13 +2,13 @@
 <div>
     <h1><ng-content></ng-content></h1>
     <p-treetable [value]="tableData()" [scrollable]="true" [tableStyle]="{'min-width':'50rem'}">
-        <ng-template #header>
+        <ng-template pTemplate="header">
             <tr>
                 <th>Id</th>
                 <th>Name</th>
             </tr>
         </ng-template>
-        <ng-template #body let-rowNode let-rowData="rowData">
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
             <tr [ttRow]="rowNode">
                 <td>
                     <p-treetable-toggler [rowNode]="rowNode" />

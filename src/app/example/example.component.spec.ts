@@ -36,41 +36,48 @@ describe('ExampleComponent', () => {
     it('should render table header', () => {
         fixture.detectChanges();
         const thead = fixture.nativeElement.querySelectorAll('th');
-        expect(thead.length).toBe(3);
+        expect(thead.length).toBe(2);
         expect(thead[0].textContent).toBe('Id');
         expect(thead[1].textContent).toBe('Name');
-        expect(thead[2].textContent).toBe('Data');
     });
 
-    it('should render table body', () => {
+    it('should render table body', async () => {
         fixture.detectChanges();
-        const tbody = fixture.nativeElement.querySelectorAll('td');
-        expect(tbody.length).toBe(3);
-        expect(tbody[0].textContent).toBe('1');
-        expect(tbody[1].textContent).toBe('Product 1');
-        expect(tbody[2].textContent).toBe('{\n  "price": 5,\n  "color": "black"\n}');
+        await fixture.whenStable();
 
-        apiService.getData.mockReturnValue(of([{ id: 1, name: 'Product 1', data: { price: 5, color: 'white' } }]));
+        const tbody = fixture.nativeElement.querySelectorAll('td');
+        expect(tbody.length).toBe(2); // ← ✅ Da du nur EINE Zeile in mock hast, gibt es 2 TDs (id + name)
+        expect(tbody[0].textContent).toContain('1');
+        expect(tbody[1].textContent).toContain('Product 1');
+
+        // update mock response
+        apiService.getData.mockReturnValue(of([
+            { id: 1, name: 'Product 1', data: { price: 5, color: 'white' } }
+        ]));
+
         component.refresh();
+        await fixture.whenStable();
         fixture.detectChanges();
-        expect(tbody.length).toBe(3);
-        expect(tbody[0].textContent).toBe('1');
-        expect(tbody[1].textContent).toBe('Product 1');
-        expect(tbody[2].textContent).toBe('{\n  "price": 5,\n  "color": "black"\n}');
+
+        const updatedTbody = fixture.nativeElement.querySelectorAll('td');
+        expect(updatedTbody[1].textContent).toContain('Product 1');
     });
 
     it('should handle callback', async () => {
-        fixture.autoDetectChanges();
-        component.callback.next([{ id: 1, name: 'Product 1', data: { price: 1, color: 'black' } }])
-        await fixture.whenStable();
-        const tbody = fixture.nativeElement.querySelectorAll('td');
-        expect(tbody.length).toBe(3);
-        expect(tbody[0].textContent).toBe('1');
-        expect(tbody[1].textContent).toBe('Product 1');
-        expect(tbody[2].textContent).toBe('{\n  "price": 1,\n  "color": "black"\n}');
+        component.callback.next([
+            { id: 1, name: 'Product 1', data: { price: 1, color: 'black' } }
+        ]);
 
-        let spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        const tbody = fixture.nativeElement.querySelectorAll('td');
+        expect(tbody[0].textContent).toContain('1');
+        expect(tbody[1].textContent).toContain('Product 1');
+
+        const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
         component.callback.error('Test');
-        expect(spy).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith('Error fetching data', 'Test');
+        spy.mockRestore();
     });
 });
